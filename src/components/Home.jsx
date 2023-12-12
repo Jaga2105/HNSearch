@@ -13,11 +13,11 @@ const Home = () => {
   const [currentPageStartIdx, setCurrentPageStartIdx] = useState(0);
   const [currentPagePosts, setCurrentPagePosts] = useState([]);
   const dispatch = useDispatch();
-  const searchCache = useSelector((state)=>state.search.searchCache)
-  console.log(searchCache)
+  const searchCache = useSelector((state) => state.search.searchCache);
+  console.log(searchCache);
 
   const handleSearchText = (e) => {
-    dispatch(searchText(e.target.value))
+    dispatch(searchText(e.target.value));
     setsearchQuery(e.target.value);
   };
   const getPosts = async () => {
@@ -26,8 +26,8 @@ const Home = () => {
     );
     const data = await response.json();
     setPosts(data.hits);
-    dispatch(cacheResults({[searchQuery]:data.hits}))
-    console.log("testing")
+    dispatch(cacheResults({ [searchQuery]: data.hits }));
+    console.log("testing");
   };
 
   const getCurrentPagePosts = () => {
@@ -43,17 +43,22 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // It results for the searchQuery is already in the cacheResults 
-    // then it will not make an API call
-    if(!searchCache[searchQuery]){
-      getPosts();
-    }
+    // This is the logic for debouncing which makes app performant
+    //  by reducing unwanted API calls
+    const timer = setTimeout(() => {
+      // It results for the searchQuery is already in the cacheResults
+      // then it will not make an API call
+      if (!searchCache[searchQuery]) {
+        getPosts();
+      }
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [searchQuery]);
   useEffect(() => {
     getCurrentPagePosts();
   }, [currentPageStartIdx, posts]);
-  // console.log(currentPagePosts);
-  // console.log(posts);
   return (
     <div className="mx-40">
       <div className="flex justify-between py-4 px-2 shadow-md mb-10">
@@ -75,11 +80,16 @@ const Home = () => {
       ) : (
         <div>
           <div>
-            {currentPagePosts.map((post, index) => (
-              <div className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer">
+            {currentPagePosts.map((post) => (
+              <div
+                key={post.story_id}
+                className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer"
+              >
                 <div className="text-lg font-semibold">{post.title}</div>
                 <div>
-                  <span className="text-sm mr-2 font-light">Author: {post.author}</span>
+                  <span className="text-sm mr-2 font-light">
+                    Author: {post.author}
+                  </span>
                   <span className="font-light">|</span>
                   <span className="text-sm ml-2 font-light">
                     {publishedTime(post.created_at)}
@@ -89,7 +99,6 @@ const Home = () => {
             ))}
           </div>
           <Pagination
-            // totalPages={posts.length / posts_per_page}
             currentPageStartIdx={currentPageStartIdx}
             handlePageIndex={handlePageIndex}
             totalPosts={posts.length}

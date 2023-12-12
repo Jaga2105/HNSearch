@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import publishedTime from "../helpers/publishedTime";
 
 const Home = () => {
   const list = [
@@ -43,11 +44,12 @@ const Home = () => {
       </div>
       <div>
         {posts.map((post, index) => (
-          <div className="p-2 bg-[#e6e6fa] mb-2 rounded-md cursor-pointer">
+          <div className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer">
             <div className="text-lg font-semibold">{post.title}</div>
             <div>
-              <span className="text-sm mr-2">author: {post.author}</span>
-              <span className="text-sm">published: {post.created_at}</span>
+              <span className="text-sm mr-2">Author: {post.author}</span>
+              <span>|</span>
+              <span className="text-sm ml-2">Published: {publishedTime(post.created_at)}</span>
             </div>
           </div>
         ))}

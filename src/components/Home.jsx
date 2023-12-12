@@ -13,8 +13,8 @@ const Home = () => {
   const [currentPageStartIdx, setCurrentPageStartIdx] = useState(0);
   const [currentPagePosts, setCurrentPagePosts] = useState([]);
   const dispatch = useDispatch();
-  // const searchCache = useSelector((state)=>state.search.searchCache)
-  // console.log(searchCache)
+  const searchCache = useSelector((state)=>state.search.searchCache)
+  console.log(searchCache)
 
   const handleSearchText = (e) => {
     dispatch(searchText(e.target.value))
@@ -25,9 +25,8 @@ const Home = () => {
       `http://hn.algolia.com/api/v1/search?query=${searchQuery}`
     );
     const data = await response.json();
-    // console.log(data.hits);
     setPosts(data.hits);
-    dispatch(cacheResults(data.hits))
+    dispatch(cacheResults({[searchQuery]:data.hits}))
     console.log("testing")
   };
 
@@ -44,6 +43,8 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // It results for the searchQuery is already in the cacheResults 
+    // then it will not make an API call
     if(!searchCache[searchQuery]){
       getPosts();
     }

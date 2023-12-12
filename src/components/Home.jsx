@@ -4,14 +4,20 @@ import publishedTime from "../helpers/publishedTime";
 import Pagination from "./Pagination";
 import Shimmer from "./Shimmer";
 import { posts_per_page } from "../helpers/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { cacheResults, searchText } from "../store/reducers/searchSlice";
 
 const Home = () => {
   const [searchQuery, setsearchQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [currentPageStartIdx, setCurrentPageStartIdx] = useState(0);
   const [currentPagePosts, setCurrentPagePosts] = useState([]);
+  const dispatch = useDispatch();
+  // const searchCache = useSelector((state)=>state.search.searchCache)
+  // console.log(searchCache)
 
   const handleSearchText = (e) => {
+    dispatch(searchText(e.target.value))
     setsearchQuery(e.target.value);
   };
   const getPosts = async () => {
@@ -19,8 +25,10 @@ const Home = () => {
       `http://hn.algolia.com/api/v1/search?query=${searchQuery}`
     );
     const data = await response.json();
-    console.log(data.hits);
+    // console.log(data.hits);
     setPosts(data.hits);
+    dispatch(cacheResults(data.hits))
+    console.log("testing")
   };
 
   const getCurrentPagePosts = () => {
@@ -36,13 +44,15 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getPosts();
+    if(!searchCache[searchQuery]){
+      getPosts();
+    }
   }, [searchQuery]);
   useEffect(() => {
     getCurrentPagePosts();
   }, [currentPageStartIdx, posts]);
-  console.log(currentPagePosts);
-  console.log(posts);
+  // console.log(currentPagePosts);
+  // console.log(posts);
   return (
     <div className="mx-40">
       <div className="flex justify-between py-4 px-2 shadow-md mb-10">
@@ -68,10 +78,10 @@ const Home = () => {
               <div className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer">
                 <div className="text-lg font-semibold">{post.title}</div>
                 <div>
-                  <span className="text-sm mr-2">Author: {post.author}</span>
-                  <span>|</span>
-                  <span className="text-sm ml-2">
-                    Published: {publishedTime(post.created_at)}
+                  <span className="text-sm mr-2 font-light">Author: {post.author}</span>
+                  <span className="font-light">|</span>
+                  <span className="text-sm ml-2 font-light">
+                    {publishedTime(post.created_at)}
                   </span>
                 </div>
               </div>

@@ -1,12 +1,14 @@
 import React from 'react'
 import Home from './components/Home'
 import './index.css'
-import Shimmer from './components/Shimmer'
+import { Provider } from 'react-redux'
+import store from './store/store'
 
 const App = () => {
   return (
+    <Provider store={store}>
     <Home/>
-    // <Shimmer/>
+    </Provider>
   )
 }
 

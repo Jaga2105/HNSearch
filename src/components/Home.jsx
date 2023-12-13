@@ -6,6 +6,7 @@ import Shimmer from "./Shimmer";
 import { posts_per_page } from "../helpers/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { cacheResults, searchText } from "../store/reducers/searchSlice";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [searchQuery, setsearchQuery] = useState("");
@@ -14,7 +15,6 @@ const Home = () => {
   const [currentPagePosts, setCurrentPagePosts] = useState([]);
   const dispatch = useDispatch();
   const searchCache = useSelector((state) => state.search.searchCache);
-  console.log(searchCache);
 
   const handleSearchText = (e) => {
     dispatch(searchText(e.target.value));
@@ -27,7 +27,6 @@ const Home = () => {
     const data = await response.json();
     setPosts(data.hits);
     dispatch(cacheResults({ [searchQuery]: data.hits }));
-    console.log("testing");
   };
 
   const getCurrentPagePosts = () => {
@@ -79,10 +78,11 @@ const Home = () => {
         <Shimmer />
       ) : (
         <div>
-          <div>
+          {/* <div> */}
             {currentPagePosts.map((post) => (
+              <Link to={`/post/${post.objectID}`}>
               <div
-                key={post.story_id}
+                key={post.objectID}
                 className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer"
               >
                 <div className="text-lg font-semibold">{post.title}</div>
@@ -96,8 +96,9 @@ const Home = () => {
                   </span>
                 </div>
               </div>
+              </Link>
             ))}
-          </div>
+          {/* </div> */}
           <Pagination
             currentPageStartIdx={currentPageStartIdx}
             handlePageIndex={handlePageIndex}

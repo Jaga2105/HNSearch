@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 import { commentReplies } from "../store/reducers/commentSlice";
 import { FaArrowUp } from "react-icons/fa";
+import { Grid } from "react-loader-spinner";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -58,8 +59,23 @@ const PostDetails = () => {
     };
   }, [showScrolltoTop]);
   return (
-    <div className="mx-60">
-      <div className="bg-violet-200 py-4 px-2 text-center">
+    <div>
+        {Object.keys(postDetails).length===0 ? (
+            <div className="flex justify-center items-center h-[600px]">
+            <Grid
+            height="80"
+            width="80"
+            color="#3b82f6"
+            ariaLabel="grid-loading"
+            radius="12.5"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+           </div>
+        ) : (
+            <div className="mx-60">
+      <div className="bg-violet-200 py-4 px-2 text-center mt-2 rounded-sm">
         <div className="text-2xl font-semibold">{postDetails.title}</div>
         <div>
           <span className="text-sm mr-2">{postDetails.type}</span>
@@ -78,6 +94,9 @@ const PostDetails = () => {
           <FaArrowUp />
         </div>
       )}
+    </div>
+        )}
+    
     </div>
   );
 };

@@ -19,7 +19,7 @@ const Pagination = ({currentPageStartIdx, handlePageIndex, totalPosts }) => {
   };
   console.log(currentPage);
   return (
-    <div className="flex justify-between my-4 py-2 ">
+    <div className="flex justify-between my-6 py-2 ">
         <div>Showing {currentPageStartIdx+1} to {currentPageStartIdx+posts_per_page} of {totalPosts} posts </div>
       <div className="flex">
         <div className={`flex justify-center items-center px-2 py-1 mr-2 rounded-full text-black h-8 w-8 shadow-md bg-gray-100 ${currentPage===1 ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-violet-300'}`}>

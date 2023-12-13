@@ -59,10 +59,10 @@ const Home = () => {
     getCurrentPagePosts();
   }, [currentPageStartIdx, posts]);
   return (
-    <div className="mx-40">
-      <div className="flex justify-between py-4 px-2 shadow-md mb-10">
-        <div className="text-xl">HNSearch</div>
-        <div className="flex justify-center items-center w-2/4 border-2 focus-within:border-gray-400 px-4 py-2 rounded-md">
+    <div className="mx-20 lg:mx-40">
+      <div className="flex justify-between items-center py-4 px-2 md:px-4 shadow-md bg-blue-400 mt-2 rounded-t-md">
+        <div className="text-lg sm:text-xl text-white">HNSearch</div>
+        <div className="flex justify-center items-center w-2/4 bg-white focus-within:border-gray-400 px-4 py-2 rounded-md">
           <FaSearch style={{ color: "gray" }} className="mr-4" />
           <input
             type="text"
@@ -70,20 +70,21 @@ const Home = () => {
             className="w-full outline-none"
             placeholder="Search here"
             onChange={(e) => handleSearchText(e)}
+            autoComplete="off"
           />
         </div>
-        <div className="text-sm">Powered by Algolia</div>
+        <div className="text-xs sm:text-sm text-white">Powered by Algolia</div>
       </div>
       {posts.length === 0 ? (
         <Shimmer />
       ) : (
         <div>
-          {/* <div> */}
+          <div className="rounded-b-md bg-gray-100">
             {currentPagePosts.map((post) => (
               <Link to={`/post/${post.objectID}`}>
               <div
                 key={post.objectID}
-                className="p-2 bg-[#e6e6fa] mb-1 rounded-md cursor-pointer"
+                className="px-2 md:px-4 py-2 cursor-pointer hover:bg-gray-200"
               >
                 <div className="text-lg font-semibold">{post.title}</div>
                 <div>
@@ -98,7 +99,7 @@ const Home = () => {
               </div>
               </Link>
             ))}
-          {/* </div> */}
+          </div>
           <Pagination
             currentPageStartIdx={currentPageStartIdx}
             handlePageIndex={handlePageIndex}

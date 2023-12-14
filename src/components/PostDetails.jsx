@@ -18,7 +18,7 @@ const PostDetails = () => {
   const getPostDetails = async () => {
     // const response = await fetch(`http://hn.algolia.com/api/v1/items/${id}`);
     const response = await fetch(
-      `https://hn-search-bsjy.vercel.app//post-details?id=${id}`,
+      `https://hn-search-bsjy.vercel.app/post-details?id=${id}`,
       // `http://localhost:3001/api/searchsuggestions?q=${suggestionQuery}`,
       {
         method: "GET",

@@ -44,7 +44,7 @@ const Home = () => {
     //   `http://hn.algolia.com/api/v1/search?query=${searchQuery}`
     // );
     const response = await fetch(
-      `https://hn-search-bsjy.vercel.app//posts?query=${searchQuery}`,
+      `https://hn-search-bsjy.vercel.app/posts?query=${searchQuery}`,
       // `http://localhost:3001/api/searchsuggestions?q=${suggestionQuery}`,
       {
         method: "GET",

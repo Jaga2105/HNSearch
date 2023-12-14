@@ -9,13 +9,27 @@ import { Link } from "react-router-dom";
 import { Grid } from "react-loader-spinner";
 
 const Home = () => {
+  // This is to store the text entered in search field
   const [query, setQuery] = useState("");
+
+  // This is searchText retrieved from the global store
   const searchQuery = useSelector((state) => state.search.searchText);
+
+  // This is for totalPosts
   const [posts, setPosts] = useState([]);
+  
+  // This is for current page post starting index to handle pagination
   const [currentPageStartIdx, setCurrentPageStartIdx] = useState(0);
+
+  // This is for posts showing on the current page
   const [currentPagePosts, setCurrentPagePosts] = useState([]);
+
+  // This is for total posts count
   const [totalPostsCount, setTotalPostsCount] = useState(0);
+
   const dispatch = useDispatch();
+
+  // This is to get the cache results stored in global store
   const searchCache = useSelector((state) => state.search.searchCache);
 
   // This is to handle input onChange

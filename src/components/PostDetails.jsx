@@ -16,8 +16,20 @@ const PostDetails = () => {
 
   // This is to make the API call to get the post details
   const getPostDetails = async () => {
-    const response = await fetch(`http://hn.algolia.com/api/v1/items/${id}`);
+    // const response = await fetch(`http://hn.algolia.com/api/v1/items/${id}`);
+    const response = await fetch(
+      `https://hn-search-bsjy.vercel.app//post-details?id=${id}`,
+      // `http://localhost:3001/api/searchsuggestions?q=${suggestionQuery}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response)
     const data = await response.json();
+    console.log(data)
     setPostDetails(data);
   };
 
@@ -118,7 +130,7 @@ const PostHeading = ({postDetails}) =>{
                 </span>
                 <span className="font-light">|</span>
                 <span className="text-sm ml-2">
-                  {postDetails.children.length} comments
+                  {postDetails?.children.length} comments
                 </span>
               </div>
             </div>

@@ -40,8 +40,18 @@ const Home = () => {
 
   // This is to make the api call based on changing search text
   const getPosts = async () => {
+    // const response = await fetch(
+    //   `http://hn.algolia.com/api/v1/search?query=${searchQuery}`
+    // );
     const response = await fetch(
-      `http://hn.algolia.com/api/v1/search?query=${searchQuery}`
+      `https://hn-search-bsjy.vercel.app//posts?query=${searchQuery}`,
+      // `http://localhost:3001/api/searchsuggestions?q=${suggestionQuery}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     const data = await response.json();
     setPosts(data.hits);

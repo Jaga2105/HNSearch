@@ -17,7 +17,6 @@ const Pagination = ({currentPageStartIdx, handlePageIndex, totalPosts }) => {
       setCurrentPage(currentPage + 1);
     }
   };
-  console.log(currentPage);
   return (
     <div className="flex justify-between my-6 py-2 ">
         <div className="font-semibold">Showing {currentPageStartIdx+1} to {totalPosts<currentPageStartIdx+posts_per_page ? totalPosts : currentPageStartIdx+posts_per_page } of {totalPosts}  </div>

@@ -7,7 +7,6 @@ const commentSlice = createSlice({
     },
     reducers:{
         commentReplies:(state, action)=>{
-            console.log(action.payload)
             if(state.repliesArr.includes(action.payload)){
                 state.repliesArr = state.repliesArr.filter((item)=>item!==action.payload)
             }else{

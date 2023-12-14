@@ -14,11 +14,14 @@ const PostDetails = () => {
   const showingComments = postDetails?.children?.slice(0, showingCommentsCount);
   const [showScrolltoTop, setShowScrolltoTop] = useState(false);
 
+  // This is to make the API call to get the post details
   const getPostDetails = async () => {
     const response = await fetch(`http://hn.algolia.com/api/v1/items/${id}`);
     const data = await response.json();
     setPostDetails(data);
   };
+
+  // This is to handle scroll to top
   const handleSrolltoTop = () => {
     window.scrollTo({
       top: 0,
@@ -28,6 +31,8 @@ const PostDetails = () => {
   useEffect(() => {
     getPostDetails();
   }, []);
+
+  // This handles the infinite scroll
   useEffect(() => {
     const onScroll = () => {
       if (
@@ -44,6 +49,7 @@ const PostDetails = () => {
     };
   }, [showingCommentsCount]);
 
+  // This is for scroll to top
   useEffect(() => {
     const toggleVisible = () => {
       const scrolled = document.documentElement.scrollTop;
@@ -60,9 +66,9 @@ const PostDetails = () => {
   }, [showScrolltoTop]);
   return (
     <div>
-        {Object.keys(postDetails).length===0 ? (
-            <div className="flex justify-center items-center h-[600px]">
-            <Grid
+      {Object.keys(postDetails).length === 0 ? (
+        <div className="flex justify-center items-center h-[600px]">
+          <Grid
             height="80"
             width="80"
             color="#3b82f6"
@@ -72,43 +78,61 @@ const PostDetails = () => {
             wrapperClass=""
             visible={true}
           />
-           </div>
-        ) : (
-            <div className="mx-60">
-      <div className="bg-violet-200 py-4 px-2 text-center mt-2 rounded-sm">
-        <div className="text-2xl font-semibold">{postDetails.title}</div>
-        <div>
-          <span className="text-sm mr-2">{postDetails.type}</span>
-          <span className="font-light">|</span>
-          <span className="text-sm ml-2">{postDetails.points} points</span>
         </div>
-      </div>
-      <div className="mt-4">
-        <Comments comments={showingComments} />
-      </div>
-      {showScrolltoTop && (
-        <div
-          className="fixed right-16 bottom-10 p-4 bg-violet-200 rounded-full shadow-md shadow-violet-400 cursor-pointer"
-          onClick={handleSrolltoTop}
-        >
-          <FaArrowUp />
+      ) : (
+        <div className="mx-20 sm:mx-30 md:mx-40 xl:mx-60">
+          <PostHeading postDetails={postDetails}/>
+          <div className="mt-4">
+            <Comments comments={showingComments} />
+          </div>
+          {showScrolltoTop && (
+            <div
+              className="fixed right-16 bottom-10 p-4 bg-violet-500 text-white rounded-full shadow-md shadow-violet-400 cursor-pointer"
+              onClick={handleSrolltoTop}
+            >
+              <FaArrowUp />
+            </div>
+          )}
         </div>
       )}
     </div>
-        )}
-    
-    </div>
   );
 };
+const PostHeading = ({postDetails}) =>{
+  return (
+    <div className="mt-2 shadow-md">
+            <div className="h-2 bg-violet-800 rounded-t-md"></div>
+            <div className="py-4 px-2 lg:px-4 bg-violet-200 rounded-b-md ">
+              <div className="text-2xl font-semibold">{postDetails.title}</div>
+              <div>
+                <span className="text-sm mr-2">
+                  Author: {postDetails.author}
+                </span>
+                <span className="font-light">|</span>
+                <span className="text-sm ml-2">
+                  {postDetails.points} points
+                </span>
+                <span className="font-light">|</span>
+                <span className="text-sm ml-2">
+                  {publishedTime(postDetails.created_at)}{" "}
+                </span>
+                <span className="font-light">|</span>
+                <span className="text-sm ml-2">
+                  {postDetails.children.length} comments
+                </span>
+              </div>
+            </div>
+          </div>
+  );
+}
 
 const Comments = ({ comments }) => {
   const showRepliesArr = useSelector((state) => state.comment.repliesArr);
-  console.log(comments);
   return (
     <div>
       {comments?.map((child) => (
         <Comment
-          key={child.objectID}
+          key={child.id}
           commentDetails={child}
           showRepliesArr={showRepliesArr}
         />
@@ -120,7 +144,6 @@ const Comments = ({ comments }) => {
 const Comment = ({ commentDetails, showRepliesArr }) => {
   const dispatch = useDispatch();
   const handleShowReplies = (id) => {
-    console.log(id);
     dispatch(commentReplies(id));
   };
   return (

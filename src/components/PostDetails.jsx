@@ -102,14 +102,14 @@ const PostHeading = ({postDetails}) =>{
   return (
     <div className="mt-2 shadow-md">
             <div className="h-2 bg-violet-800 rounded-t-md"></div>
-            <div className="py-4 px-2 lg:px-4 bg-violet-200 rounded-b-md ">
+            <div className="py-4 px-4 bg-violet-200 rounded-b-md ">
               <div className="text-2xl font-semibold">{postDetails.title}</div>
               <div>
                 <span className="text-sm mr-2">
                   Author: {postDetails.author}
                 </span>
                 <span className="font-light">|</span>
-                <span className="text-sm ml-2">
+                <span className="text-sm mx-2">
                   {postDetails.points} points
                 </span>
                 <span className="font-light">|</span>
